@@ -25,18 +25,16 @@
 
     <div id="title"><a href="/"><img src="/assets/images/logo.png"></a></div>
     <div id="wrapper">
-
-        <?php echo $content; ?>
-        @yield('content')<!--无内容-->
+        @yield('content','未找到内容...')
     </div>
     <div id="footer">&#169; Copyrights 2014 GuilinRooms.com</div>
 </div>
 </body>
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-
+<!--<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>-->
+<script src="/assets/js/jquery1.1.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-
+<!--<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+<script src="/assets/js/bootstrap.min.js"></script>
 </html>
