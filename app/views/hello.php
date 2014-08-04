@@ -1,42 +1,641 @@
-<!doctype html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Laravel PHP Framework</title>
-	<style>
-		@import url(//fonts.googleapis.com/css?family=Lato:700);
+<div id="content">
+<div id="nav" class="clearfix">
+<div id="nav-item">
+    <a href="<?php echo URL::to('sell'); ?>">出售单位(<?php //echo $sellCount; ?>)</a></a><span class="separator"> ｜ </span>
+    <a href="<?php echo URL::to('rent'); ?>">出租单位(<?php //echo $rentCount; ?>)</a>
+</div>
 
-		body {
-			margin:0;
-			font-family:'Lato', sans-serif;
-			text-align:center;
-			color: #999;
-		}
 
-		.welcome {
-			width: 300px;
-			height: 200px;
-			position: absolute;
-			left: 50%;
-			top: 50%;
-			margin-left: -150px;
-			margin-top: -100px;
-		}
+<div id="user-info">
+    <a href="javascript::" id="username" data-toggle="modal" data-target="#model_signin">登录</a><span
+        class="separator"> ｜ </span>
+    <a href="javascript::" id="username" data-toggle="modal" data-target="#model_signup">注册</a>
 
-		a, a:visited {
-			text-decoration:none;
-		}
+    <!-- signin Modal -->
+    <div class="modal fade" id="model_signup" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span
+                            aria-hidden="true">&times;</span><span
+                            class="sr-only">关闭</span></button>
+                    <h4 class="modal-title" id="myModalLabel">注册您的账号...</h4>
+                </div>
+                <div class="modal-body">
+                    <p style="color:#666;">所有会员信息均会被保密！
+                        <small>(密码将会被加密存储，任何人均不能获得你的密码)</small>
+                        <br>禁止刊登任何非法广告，拒绝房屋中介！
+                        <small>(否则管理员有权删除你的广告和账号)</small>
+                    </p>
+                    <div>
+                        <form id="signup-form" class="form-horizontal" method="post" action="/signup">
+                            <?php echo Form::token(); ?>
 
-		h1 {
-			font-size: 32px;
-			margin: 16px 0 0 0;
-		}
-	</style>
-</head>
-<body>
-	<div class="welcome">
-		<a href="http://laravel.com" title="Laravel PHP Framework"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIcAAACHCAYAAAA850oKAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyRpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoTWFjaW50b3NoKSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDoyNUVCMTdGOUJBNkExMUUyOTY3MkMyQjZGOTYyREVGMiIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDoyNUVCMTdGQUJBNkExMUUyOTY3MkMyQjZGOTYyREVGMiI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjI1RUIxN0Y3QkE2QTExRTI5NjcyQzJCNkY5NjJERUYyIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjI1RUIxN0Y4QkE2QTExRTI5NjcyQzJCNkY5NjJERUYyIi8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+g6J7EAAAEL1JREFUeNrsXQmU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" alt="Laravel PHP Framework"></a>
-		<h1>You have arrived.</h1>
-	</div>
-</body>
-</html>
+                            <div id="div_id_username" class="form-group"><label for="id_username"
+                                                                                class="control-label col-lg-3 requiredField">
+                                    昵称<span class="asteriskField">*</span></label>
+
+                                <div class="controls col-lg-7"><input class="required textinput textInput form-control"
+                                                                      id="id_username" maxlength="30" name="username"
+                                                                      type="text"/></div>
+                            </div>
+                            <div id="div_id_email" class="form-group"><label for="id_email"
+                                                                             class="control-label col-lg-3 requiredField">
+                                    常用邮箱<span class="asteriskField">*</span></label>
+
+                                <div class="controls col-lg-7"><input class="required textinput textInput form-control"
+                                                                      id="id_email" maxlength="75" name="email"
+                                                                      type="text"/>
+
+                                    <p id="hint_id_email" class="help-block small">网站不会向您发送广告邮件</p>
+
+                                </div>
+                            </div>
+                            <div id="div_id_password" class="form-group"><label for="id_password"
+                                                                                 class="control-label col-lg-3 requiredField">
+                                    登录密码<span class="asteriskField">*</span></label>
+
+                                <div class="controls col-lg-7"><input class="required textinput textInput form-control"
+                                                                      id="id_password" name="password"
+                                                                      type="password"/></div>
+                            </div>
+                            <div class="form-group"><label class="control-label col-lg-3 requiredField">
+                                    重复密码<span class="asteriskField">*</span></label>
+
+                                <div class="controls col-lg-7"><input class="required textinput textInput form-control"
+                                                                       name="password_confirmation"
+                                                                      type="password"/></div>
+                            </div>
+
+
+                            <div class="form-action">
+                                <div id="new-property">
+                                    <input type="submit" />
+                                    <a href="javascript:"
+                                       onclick="onSignup($('#signup-form')); return false;">注册</a>
+                                </div>
+                            </div>
+                        </form>
+
+
+                    </div>
+                    <!--                    <div class="modal-footer">-->
+                    <!--                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+                    <!--                        <button type="button" class="btn btn-primary">Save changes</button>-->
+                    <!--                    </div>-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="intro">
+    <p>Guilin Rooms 是一个为桂林市居民提供一个简单而开放的楼宇销售平台。楼盘发布30天后将自动删除。如有任何疑问，<a
+            href="mailto:54853315@qq.com">请发邮件</a>或在我们的<a href="https://weibo.crazyphper.com"
+                                                          target="_blank">微博</a>留言。
+    </p>
+</div>
+<div id="menu" class="clearfix">
+    <form id="search-form" action="search">
+        <input class="form-control" id="search" name="q" placeholder='搜尋: "三多路", "小香港"' type="text">
+    </form>
+    <div id="new-property">
+        <a href="<?php echo URL::to('new'); ?>">发布楼盘</a>
+    </div>
+</div>
+
+<div id="sell-property-list" class="property-list">
+<h2>最新出售单位</h2>
+
+<div class="property-talbe">
+
+
+<a href="r/302/">
+
+
+    <div class="property-image"><img src="/static/images/no-image.png"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        海濱 13座 高層D 正東南 光爽 開揚
+        <span class="property-meta">
+            
+                828呎
+            
+            / 538萬
+        </span>
+    </div>
+    <div class="property-size">
+
+        828呎
+
+    </div>
+    <div class="property-prize">538萬</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/294/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00294_lchXc.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        超荀祥光大廈 5樓連天台共三層
+        <span class="property-meta">
+            
+                1,307呎
+            
+            / 298萬
+        </span>
+    </div>
+    <div class="property-size">
+
+        1,307呎
+
+    </div>
+    <div class="property-prize">298萬</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/293/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00293_TOYDL.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        佳景一梯一伙.. 前座
+        <span class="property-meta">
+            
+                600呎
+            
+            / 368萬
+        </span>
+    </div>
+    <div class="property-size">
+
+        600呎
+
+    </div>
+    <div class="property-prize">368萬</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/292/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00292_ysJbq.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        氹仔市中心麗駿軒3房1332呎荀售
+        <span class="property-meta">
+            
+                1,332呎
+            
+            / 920萬
+        </span>
+    </div>
+    <div class="property-size">
+
+        1,332呎
+
+    </div>
+    <div class="property-prize">920萬</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/291/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00291_AgdQH.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        金利達花園 4座低層AC
+        <span class="property-meta">
+            
+                1,238呎
+            
+            / 1,238萬
+        </span>
+    </div>
+    <div class="property-size">
+
+        1,238呎
+
+    </div>
+    <div class="property-prize">1,238萬</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/290/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00290_kEpvW.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        金利逹花園 19年電梯樓 靚裝 望園景 有套房
+        <span class="property-meta">
+            
+                1,238呎
+            
+            / 780萬
+        </span>
+    </div>
+    <div class="property-size">
+
+        1,238呎
+
+    </div>
+    <div class="property-prize">780萬</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/289/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00289_huziV.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        高士德區電梯樓 雅廉花園 靚裝
+        <span class="property-meta">
+            
+                700呎
+            
+            / 558萬
+        </span>
+    </div>
+    <div class="property-size">
+
+        700呎
+
+    </div>
+    <div class="property-prize">558萬</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/288/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00288_ncjKI.JPG.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        筷子基 信和廣場 3座高層S
+        <span class="property-meta">
+            
+                880呎
+            
+            / 758萬
+        </span>
+    </div>
+    <div class="property-size">
+
+        880呎
+
+    </div>
+    <div class="property-prize">758萬</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/287/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00287_LaexX.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        近發電廠 亨達大廈 高層R
+        <span class="property-meta">
+            
+                750呎
+            
+            / 518萬
+        </span>
+    </div>
+    <div class="property-size">
+
+        750呎
+
+    </div>
+    <div class="property-prize">518萬</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/285/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00285_aCCVV.jpeg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        免佣自售南貴,地產有佣
+        <span class="property-meta">
+            
+                630呎
+            
+            / 448萬
+        </span>
+    </div>
+    <div class="property-size">
+
+        630呎
+
+    </div>
+    <div class="property-prize">448萬</div>
+    <div class="property-date">08-03</div>
+</a>
+
+</div>
+<div class="more-property"><a href="/p/sell/">查看全部 165
+        個出售單位 →</a></div>
+</div>
+
+
+<div id="rent-property-list" class="property-list">
+<h2>最新出租單位</h2>
+
+<div class="property-talbe">
+
+
+<a href="/p/303/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00303_qUfQt.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        金豐大廈 高層 F 間3房 齊租 企理
+        <span class="property-meta">
+            
+                3房
+            
+            / 15,000
+        </span>
+    </div>
+    <div class="property-size">
+
+        3房
+
+    </div>
+    <div class="property-prize">15,000</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/301/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00301_BaLch.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        廣華 高層 2房 靚 齊租 ~~
+        <span class="property-meta">
+            
+                2房
+            
+            / 8,000
+        </span>
+    </div>
+    <div class="property-size">
+
+        2房
+
+    </div>
+    <div class="property-prize">8,000</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/297/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00297_JzDww.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        泉福新頓嘉俊閣E單位
+        <span class="property-meta">
+            
+                1房
+            
+            / 9,000
+        </span>
+    </div>
+    <div class="property-size">
+
+        1房
+
+    </div>
+    <div class="property-prize">9,000</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/296/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00296_lpTvH.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        大潭山 靚傢電 有匙
+        <span class="property-meta">
+            
+                3房
+            
+            / 26,000
+        </span>
+    </div>
+    <div class="property-size">
+
+        3房
+
+    </div>
+    <div class="property-prize">26,000</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/295/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00295_hLdiA.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        華寶2房 齊靚租
+        <span class="property-meta">
+            
+                2房
+            
+            / 13,800
+        </span>
+    </div>
+    <div class="property-size">
+
+        2房
+
+    </div>
+    <div class="property-prize">13,800</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/286/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00286_ZJTtb.JPG.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        海怡花園 2座 中層 正2房 大廳 光猛 四正
+        <span class="property-meta">
+            
+                2房
+            
+            / 11,800
+        </span>
+    </div>
+    <div class="property-size">
+
+        2房
+
+    </div>
+    <div class="property-prize">11,800</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/283/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00283_ElzTY.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        氹仔 酒店式靚裝 樂駿盈軒 高層H 開放式 超干淨
+        <span class="property-meta">
+            
+                1房
+            
+            / 10,500
+        </span>
+    </div>
+    <div class="property-size">
+
+        1房
+
+    </div>
+    <div class="property-prize">10,500</div>
+    <div class="property-date">08-03</div>
+</a>
+
+
+<a href="/p/282/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00282_qZokn.JPG.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        靚裝 逸麗花園
+        <span class="property-meta">
+            
+                3房
+            
+            / 11,600
+        </span>
+    </div>
+    <div class="property-size">
+
+        3房
+
+    </div>
+    <div class="property-prize">11,600</div>
+    <div class="property-date">08-01</div>
+</a>
+
+
+<a href="/p/275/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00275_EjNEV.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        租 群發花園 近葡京 4房 齊傢電,望英皇
+        <span class="property-meta">
+            
+                4房
+            
+            / 26,000
+        </span>
+    </div>
+    <div class="property-size">
+
+        4房
+
+    </div>
+    <div class="property-prize">26,000</div>
+    <div class="property-date">08-01</div>
+</a>
+
+
+<a href="/p/273/">
+
+
+    <div class="property-image"><img src="/media/images/everyoneproperty_00273_GcKdY.jpg.50x50_q85_crop.jpg"></div>
+    <div class="property-type">住宅</div>
+
+    <div class="property-title">
+        近雀仔園天橋二馬路3樓後座兩房半齊傢電
+        <span class="property-meta">
+            
+                2房
+            
+            / 6,900
+        </span>
+    </div>
+    <div class="property-size">
+
+        2房
+
+    </div>
+    <div class="property-prize">6,900</div>
+    <div class="property-date">08-01</div>
+</a>
+
+</div>
+<div class="more-property"><a href="/p/rent/">查看全部 105
+        個出租單位 →</a></div>
+</div>
+
+
+</div>
+
+
+<script type="text/javascript">
+//    function onSignup(form) {
+//        $.post(form.attr('action'), form.serialize(), function (data) {
+//            alert(data);
+//        });
+//    }
+</script>
+
