@@ -1,6 +1,15 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: konakona
+ * $Id$
+ * Date: 14-8-4
+ * Time: 上午2:19$
+ */
 
 class BaseController extends Controller {
+
+	protected $layout = 'layouts.master';
 
 	/**
 	 * Setup the layout used by the controller.
