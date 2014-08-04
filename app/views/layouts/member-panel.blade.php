@@ -21,6 +21,12 @@
                 <h4 class="modal-title" id="myModalLabel">注册您的账号...</h4>
             </div>
             <div class="modal-body">
+
+                <div class="alert alert-success" id="signup_alert" role="alert" style="display:none">
+                    恭喜您，注册成功！您可以点击前往<a href="/dashboard">个人中心</a>，或<a href="javascript::"
+                                                                      data-dismiss="modal">关闭</a>弹出层后继续访问。
+                </div>
+
                 <p style="color:#666;">所有会员信息均会被保密！
                     <small>(密码将会被加密存储，任何人均不能获得你的密码)</small>
                     <br>禁止刊登任何非法广告，拒绝房屋中介！
@@ -28,7 +34,6 @@
                 </p>
                 <div>
                     <form id="signup-form" class="form-horizontal" method="post" action="/signup">
-                        <?php echo Form::token(); ?>
 
                         <div id="div_id_username" class="form-group"><label for="id_username"
                                                                             class="control-label col-lg-3 requiredField">
@@ -36,7 +41,7 @@
 
                             <div class="controls col-lg-7"><input class="required textinput textInput form-control"
                                                                   id="id_username" maxlength="30" name="username"
-                                                                  type="text"/></div>
+                                                                  type="text" placeholder="可输入6到14个中文字符"/></div>
                         </div>
                         <div id="div_id_email" class="form-group"><label for="id_email"
                                                                          class="control-label col-lg-3 requiredField">
@@ -56,7 +61,8 @@
 
                             <div class="controls col-lg-7"><input class="required textinput textInput form-control"
                                                                   id="id_password" name="password"
-                                                                  type="password"/></div>
+                                                                  type="password" placeholder="请输入8至26个错综复杂的字符成为您的密码"/>
+                            </div>
                         </div>
                         <div class="form-group"><label class="control-label col-lg-3 requiredField">
                                 重复密码<span class="asteriskField">*</span></label>
@@ -69,7 +75,6 @@
 
                         <div class="form-action">
                             <div id="new-property">
-                                <input type="submit"/>
                                 <a href="javascript:"
                                    onclick="onSignup($('#signup-form')); return false;">注册</a>
                             </div>
@@ -106,8 +111,8 @@
                 </p>
                 <div>
                     <form id="signin-form" class="form-horizontal" method="post" action="/signin">
-                        <?php echo Form::token(); ?>
-                        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                        <input type="hidden" name="_token" value="{{ csrf_token() }}"/>
+
                         <div id="div_id_email" class="form-group"><label for="id_email"
                                                                          class="control-label col-lg-3 requiredField">
                                 注册邮箱<span class="asteriskField">*</span></label>
@@ -125,13 +130,12 @@
                                                                   type="password"/>
 
                                 <p id="hint_id_email" class="help-block small">
-                                    <a href="#">忘记密码了？</a></p>
+                                    <a href="javascript:alert('即将开放！')">忘记密码了？</a></p>
                             </div>
                         </div>
 
                         <div class="form-action">
                             <div id="new-property">
-                                <input type="submit"/>
                                 <a href="javascript:"
                                    onclick="onSignin($('#signin-form')); return false;">登录</a>
                             </div>
@@ -140,10 +144,6 @@
 
 
                 </div>
-                <!--                    <div class="modal-footer">-->
-                <!--                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
-                <!--                        <button type="button" class="btn btn-primary">Save changes</button>-->
-                <!--                    </div>-->
             </div>
         </div>
     </div>

@@ -24,45 +24,64 @@ Route::get('/', 'HomeController@showWelcome');
 Route::get('rent/*', 'RoomsController@showRent');
 Route::get('sell/*', 'RoomsController@showSell');
 
-Route::get('/r/{id}', 'RoomsController@showInfo');
+Route::get('/r/{id}', function ($id) {
+    $room = Rooms::whereId($id)->first();
+    return View::make('room.info')->with(['room' => $room]);
+});
 Route::get('/search/*', 'RoomsController@showSearch');
 
-Route::get('/new', 'RoomsController@showAdd');
-Route::post('/saveroom', 'RoomsController@submit');
+Route::get('/new', function () {
+    $type = Input::get('t'); //出售方式
+    return View::make('room.new_select');
+});
+
+//显示发布界面
+Route::get('/new/{t}', function ($type) {
+    return View::make('room.new_' . $type);
+});
+
+//处理发布请求
+Route::post('/new/save', 'RoomsController@save');
+
 
 //提交注册表单
-Route::post('/signup', array('before' => 'csrf,guest', function () {
-    $rules = array(
+Route::any('/signup', array('before' => 'csrf,guest', function () {
+
+    $signupRules = array(
         'username' => 'required|min:6|max:14|unique:members',
         'password' => 'required|min:8|max:26|confirmed',
         'email' => 'required|email|unique:members'
     );
-    $validator = Validator::make(Input::all(), $rules);
 
+    $validator = Validator::make(Input::all(), $signupRules);
     if ($validator->fails()) {
-        echo '有错误';
-        echo $validator->messages();
-        print_r($failed = $validator->failed());
-        AppHelper::ajaxReturn('注册失败！', $failed, 0);
+        AppHelper::ajaxReturn($validator->messages()->first(), $validator->messages(), 0);
     } else {
         $model = new Members();
-        $model->username = $_POST['username'];
-        $model->password = Hash::make($_POST['password']);
-        $model->email = $_POST['email'];
+        $model->username = Input::get('username');
+        $model->password = Hash::make(Input::get('password'));
+        $model->email = Input::get('email');
         $model->create_time = time();
         $model->save();
-        AppHelper::ajaxReturn('注册成功！请登陆', [], 1);
+        $username = Input::get('username'); //不能直接将返回值给Auth用，必须先赋值
+        Auth::login(Members::where("username", "=",$username)->first());
+        AppHelper::ajaxReturn('注册成功！感谢您的支持。', [], 1);
     }
 }));
 
 
 //提交登录表单
-Route::post('/signin', array('before' => 'csrf,guest', function () {
+Route::any('/signin', array('before' => 'csrf,guest', function () {
+    if (!Input::get('email')) {
+        AppHelper::ajaxReturn('请输入注册邮箱');
+    }
+    if (!Input::get('password')) {
+        AppHelper::ajaxReturn('请输入登录密码');
+    }
     if (Auth::attempt(array('email' => Input::get('email'), 'password' => Input::get('password')), Auth::viaRemember())) {
-        AppHelper::ajaxReturn('登陆成功！', [], 1);
-//        return Redirect::intended('dashboard');
+        AppHelper::ajaxReturn('登录成功！', [], 1);
     } else {
-        AppHelper::ajaxReturn('登陆失败！');
+        AppHelper::ajaxReturn('账号或密码错误。');
     }
 }));
 

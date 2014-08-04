@@ -21,16 +21,17 @@ class AppHelper
             $json_arr['message'] = $message;
             $json_arr['data'] = $data;
             $json_arr['status'] = intval($status);
-            echo json_encode($json_arr);
+            echo json_encode($json_arr,JSON_FORCE_OBJECT);
+            exit;
         }
     }
 
     /**
      * 显示提示语
      * @param string $message
-     * @param string $code
+     * @param string $url
      */
-    public static function showMessage($message = '操作成功', $code = '200')
+    public static function showMessage($message = '操作成功', $url = '')
     {
         $this->layout = View::make('layouts.success');
         $code = ($code == 200 || $code == 300) ? $code : 200;

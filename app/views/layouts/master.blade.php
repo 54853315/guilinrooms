@@ -27,7 +27,8 @@
     <div id="wrapper">
         @yield('content','未找到内容...')
     </div>
-    <div id="footer">&#169; Copyrights 2014 GuilinRooms.com</div>
+    <!-- 联系不上http://everyoneproperty.com的主人，因此会在10天内改变自己的页面样式。  by:konakona 2014.8.6 -->
+    <div id="footer">&#169; Copyrights 2014 GuilinRooms.com . Design By <a href="http://everyoneproperty.com">everyoneproperty</a> （8月16日将改版）</div>
 </div>
 </body>
 
