@@ -18,6 +18,14 @@
 
     <link rel="stylesheet" href="/assets/css/20140804.css" type="text/css"/>
     <link rel="stylesheet" href="/assets/css/main.css" type="text/css"/>
+
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <!--<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>-->
+    <script src="/assets/js/jquery1.1.min.js"></script>
+    <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+    <!--<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+    <script src="/assets/js/bootstrap.min.js"></script>
+
 </head>
 
 <body>
@@ -32,10 +40,5 @@
 </div>
 </body>
 
-<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<!--<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>-->
-<script src="/assets/js/jquery1.1.min.js"></script>
-<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<!--<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
-<script src="/assets/js/bootstrap.min.js"></script>
+
 </html>

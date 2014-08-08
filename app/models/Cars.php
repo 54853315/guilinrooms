@@ -20,7 +20,6 @@ class Cars extends Eloquent
     );
 
     public $timestamps = false;
-    protected $hidden = array('password');
 
 
 } 

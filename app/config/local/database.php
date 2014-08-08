@@ -23,12 +23,12 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'homestead',
-			'username'  => 'homestead',
-			'password'  => 'secret',
+			'database'  => 'kona_rooms',
+			'username'  => 'root',
+			'password'  => '',
 			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
+			'collation' => 'utf8_general_ci',
+			'prefix'    => 'r_',
 		),
 
 		'pgsql' => array(

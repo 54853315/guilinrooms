@@ -140,6 +140,7 @@
 
 <script type="text/javascript">
     function onSignup(form) {   //注册
+        $('#signup_submit_a').attr('disabled','disabled');
         $.post(form.attr('action'), form.serialize(), function (data) {
             var json_obj = jQuery.parseJSON ( data );
             if (json_obj.status == '0') {
@@ -153,6 +154,7 @@
     }
 
     function onSignin(form) {
+        $('#signin_submit_a').attr('disabled','disabled');
         $.post(form.attr('action'), form.serialize(), function (data) {
             var json_obj = jQuery.parseJSON ( data );
             if (json_obj.status == '0') {

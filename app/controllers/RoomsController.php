@@ -12,7 +12,7 @@ class RoomsController extends BaseController
 
     public function save()
     {
-        print_r($_POST);
+//        print_r($_POST);
         switch ($_POST['t']) {
             case 'car':
                 $this->doBuildNewCar();
@@ -26,16 +26,40 @@ class RoomsController extends BaseController
         exit;
     }
 
+    /**
+     * 获取区域信息
+     * @param int $id
+     * @param bool|int $html
+     * @return array
+     */
+    public static function getArea($id = 0, $html = 0)
+    {
+//        $result = DB::table('area')->where('pid', '=', $id)->where('status', '=', 1)->remember(10)->get();
+        $result = DB::table('area')->where('pid', '=', $id)->where('status', '=', 1)->get();
+        if ($html == 1) {
+            if (is_null($result)) {
+                return 0;
+            }
+            $code = "";
+            foreach ($result as $area) {
+                $code .= "<option value='{$area->id}'>{$area->name}</option>";
+            }
+            return $code;
+        } else {
+            return $result;
+        }
+    }
+
     protected function doBuildNewRoom()
     {
-
-        $validator = Validator::make(Input::all(), Cars::$createRules);
+        $validator = Validator::make(Input::all(), Rooms::$createRules);
 
         if ($validator->fails()) {
-            return Redirect::back()->withInput()->withErrors($validator->messages());
+            return Redirect::back()->withInput()->withErrors($validator->messages());   //不起作用！！
         } else {
-            $model = new Cars();
-            $model = Input::all();
+            $model = new Rooms();
+            $model->create_time = time();
+            var_dump($model->create(Input::all()));
 //            $model->title = Input::get('title');
 //            $model->description = Input::get('description');
 //            $model->contact_info = Input::get('contact_info');
@@ -43,11 +67,9 @@ class RoomsController extends BaseController
 //            $model->price = Input::get('price');
 //            $model->type = Input::get('type');
 //            $model->type = Input::get('type');
-            $model->create_time = time();
             $model->save();
-//            AppHelper::showMessage('发布成功！', [], 1);
+            AppHelper::showMessage('发布成功！', [], 1);
         }
-
     }
 
     protected function doBuildNewCar()

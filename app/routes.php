@@ -30,18 +30,23 @@ Route::get('/r/{id}', function ($id) {
 });
 Route::get('/search/*', 'RoomsController@showSearch');
 
+//使用rooms可以访问Rooms控制器中的所有有效方法
+Route::controller('rooms', 'RoomsController');
+
 Route::get('/new', function () {
-    $type = Input::get('t'); //出售方式
     return View::make('room.new_select');
 });
 
-//显示发布界面
+//统一处理发布界面
 Route::get('/new/{t}', function ($type) {
-    return View::make('room.new_' . $type);
+    return View::make('room.new_' . $type)->with(['areas' => RoomsController::getArea(0)]);
 });
 
 //处理发布请求
 Route::post('/new/save', 'RoomsController@save');
+//Route::post('/new/save', function(){
+//    return Redirect::back()->withInput();
+//});
 
 
 //提交注册表单
@@ -64,7 +69,7 @@ Route::any('/signup', array('before' => 'csrf,guest', function () {
         $model->create_time = time();
         $model->save();
         $username = Input::get('username'); //不能直接将返回值给Auth用，必须先赋值
-        Auth::login(Members::where("username", "=",$username)->first());
+        Auth::login(Members::where("username", "=", $username)->first());
         AppHelper::ajaxReturn('注册成功！感谢您的支持。', [], 1);
     }
 }));

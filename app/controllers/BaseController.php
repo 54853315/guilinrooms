@@ -24,4 +24,14 @@ class BaseController extends Controller
         }
     }
 
+    /**
+     * 空方法
+     * 乃异常访问，因此返回404
+     * @param array $pars
+     */
+    public function missingMethod($pars = [])
+    {
+        App::abort(404);
+    }
+
 }

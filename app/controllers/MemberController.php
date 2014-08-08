@@ -7,10 +7,12 @@
  * Time: 上午2:19$
  */
 
-class MemberController extends UserController{
+class MemberController extends BaseController{
 
-
-	public function showProfile()
+	public function showProfile($id)
 	{
+        $user = Members::find($id);
+
+        return View::make('user.profile')->with(compact($user));
 	}
 }

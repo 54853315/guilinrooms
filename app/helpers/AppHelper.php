@@ -7,7 +7,7 @@
  * Time: 下午11:38$
  */
 
-class AppHelper
+class AppHelper extends Controller
 {
     /**
      * 封装一枚简单的json输出，格式与ThinkPHP一致

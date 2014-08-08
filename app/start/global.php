@@ -67,6 +67,15 @@ App::down(function()
 	return Response::make("Be right back!", 503);
 });
 
+/**
+ * 处理404错误
+ */
+App::missing(function($exception)
+{
+    return "你好我怎么说好呢...这个页面不存在！";
+//    return Response::view('errors.missing', array(), 404);
+});
+
 /*
 |--------------------------------------------------------------------------
 | Require The Filters File
