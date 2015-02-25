@@ -75,7 +75,7 @@
 
                         <div class="form-action">
                             <div id="new-property">
-                                <a href="javascript:"
+                                <a href="javascript:" id="signup_submit_a"
                                    onclick="onSignup($('#signup-form')); return false;">注册</a>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
 
                         <div class="form-action">
                             <div id="new-property">
-                                <a href="javascript:"
+                                <a href="javascript:" id="signin_submit_a"
                                    onclick="onSignin($('#signin-form')); return false;">登录</a>
                             </div>
                         </div>

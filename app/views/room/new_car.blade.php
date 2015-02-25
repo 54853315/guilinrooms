@@ -62,6 +62,12 @@
                 <div class="controls col-lg-10"><input class="textinput textInput form-control"
                                                        maxlength="30" name="title" type="text"/>
                     <?php echo $errors->first('title');?>
+
+                    @foreach ($errors->all() as $message)
+                    <li>{{ $message }}</li>
+                    @endforeach
+
+                    <p class="text-danger"> ! </p>
                     <p id="hint_id_title" class="help-block">例如: "恒祥花园地下停车位x1"</p></div>
             </div>
 

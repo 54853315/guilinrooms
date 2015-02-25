@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Created by PhpStorm.
  * User: konakona
@@ -12,7 +13,6 @@ class RoomsController extends BaseController
 
     public function save()
     {
-//        print_r($_POST);
         switch ($_POST['t']) {
             case 'car':
                 $this->doBuildNewCar();
@@ -53,20 +53,12 @@ class RoomsController extends BaseController
     protected function doBuildNewRoom()
     {
         $validator = Validator::make(Input::all(), Rooms::$createRules);
-
         if ($validator->fails()) {
-            return Redirect::back()->withInput()->withErrors($validator->messages());   //不起作用！！
+            return Redirect::back()->withInput()->withErrors($validator)->withInput();
         } else {
             $model = new Rooms();
             $model->create_time = time();
-            var_dump($model->create(Input::all()));
-//            $model->title = Input::get('title');
-//            $model->description = Input::get('description');
-//            $model->contact_info = Input::get('contact_info');
-//            $model->size = Input::get('size');
-//            $model->price = Input::get('price');
-//            $model->type = Input::get('type');
-//            $model->type = Input::get('type');
+            $model->create(Input::all());
             $model->save();
             AppHelper::showMessage('发布成功！', [], 1);
         }
@@ -76,21 +68,60 @@ class RoomsController extends BaseController
     {
 
         $validator = Validator::make(Input::all(), Cars::$createRules);
-
         if ($validator->fails()) {
-            return Redirect::back()->withInput()->withErrors($validator->messages());
+            dd($validator->messages());
+            return Redirect::back(302)->withErrors($validator)->withInput();
         } else {
-            $model = new Cars();
-            $model = Input::all();
-//            $model->title = Input::get('title');
-//            $model->description = Input::get('description');
-//            $model->contact_info = Input::get('contact_info');
-//            $model->size = Input::get('size');
-//            $model->price = Input::get('price');
-//            $model->type = Input::get('type');
-//            $model->type = Input::get('type');
-            $model->create_time = time();
-            $model->save();
+
+            // @TODO  处理上传图片
+            $files = Input::file();
+            $destinationPath = $_SERVER['DOCUMENT_ROOT'].'uploads/';
+
+            $imageCount = 5;    //可上传图片总数
+            $imageFillCount = 0;  //有效图片数
+            $imageLegalSize = 1024*1024; //1M
+
+            //检查所有上传的文件是否有效
+            for ($i = 0; $i < $imageCount; $i++) {
+                if (Input::hasFile('image' . $i)) {
+                    $file = Input::file('image' . $i);
+                    if (!$file->isValid()) {
+                        Redirect::back(302)->withErrors(['upload_error'.$i,"你上传的文件有误，请上传图片格式文件。"]);
+                    }
+                    if($file->getMaxFilesize() > $imageLegalSize){
+                        Redirect::back(302)->withErrors(['upload_error'.$i,"你上传的图片太大了，请上传小语1M的图片哦！"]);
+                    }
+                    $imageFillCount++;
+                }
+                unset($file);
+            }
+
+            //开始保存图片
+            $images = [];
+            for ($i = 0; $i < $imageCount; $i++) {
+                if (Input::hasFile('image' . $i)) {
+                    $file = Input::file('image' . $i);
+//                    if ($file->isValid()) {
+                        //转移文件并保存文件名
+                        $newFileName = md5(time()).'.'.$file->getClientOriginalExtension();
+                        $file->move($destinationPath,$newFileName);
+                        $images[] = $destinationPath.$newFileName;
+//                    }
+                }
+                unset($file,$newFileName);
+            }
+
+            $carModel = new Cars(Input::all());
+            $carModel->create_time = time();
+            $rs = $carModel->save();
+            if($rs){
+                //保存图片
+
+            }else{
+                Redirect::back()->withInput()->withErrors($carModel->getErrors());
+            }
+            dd($rs);
+
 //            AppHelper::showMessage('发布成功！', [], 1);
         }
 
@@ -113,6 +144,7 @@ class RoomsController extends BaseController
 
     public function showSell()
     {
+        echo '还没有开发完...';
     }
 
     /**
